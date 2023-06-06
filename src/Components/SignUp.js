@@ -52,6 +52,7 @@ const SignUp = () => {
       alert("Password doesnt match");
     }
   };
+
   return (
     <Container className="w-50 shadow-lg " style={{border: '1px solid black', borderRadius: '5px',marginTop: '10%'}}>
         <div className="text-center">
@@ -77,10 +78,13 @@ const SignUp = () => {
           />
         </Form.Group>
         </Container>
-        <div className="text-center mt-4 mb-3">
+        <div className="text-center mt-4">
           <Button type="submit">Sign Up</Button>
         </div>
       </Form>
+        <div className="text-center mt-1 mb-3">
+      <Button variant="outline text-primary" onClick={() => {navigate('/login')}} >Login with existing account</Button>
+        </div>
     </Container>
   );
 };
