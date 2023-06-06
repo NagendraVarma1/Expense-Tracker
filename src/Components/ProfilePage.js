@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Button, Container, Form, Navbar } from "react-bootstrap";
 import AuthContext from "../Store/Auth/auth-context";
 
@@ -6,6 +6,42 @@ const Profile = () => {
     const authCtx = useContext(AuthContext)
     const nameInputRef = useRef();
     const imageInputRef = useRef();
+
+    const fetchData = () => {
+      let url = 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBcIbPGIsiRRG6TKVgArKPKmdMlcbj_NLI';
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          idToken: authCtx.token,
+        }),
+        headers: {
+          'Content-Type' : 'application/json'
+        }
+      })
+      .then((res) => {
+        if(res.ok) {
+          return res.json();
+        }
+        else {
+          return res.json().then((data) => {
+            throw new Error('Fetching Data Failed')
+          })
+        }
+      }).then((data) => {
+        data.users.forEach((user) => {
+          nameInputRef.current.value = user.displayName;
+          imageInputRef.current.value = user.photoUrl;
+        })
+        
+      }).catch((err) => {
+        alert(err.message)
+      })
+    }
+
+    useEffect(() => {
+      fetchData()
+    }, [])
 
     const profileSubmitHandler = (event) => {
         event.preventDefault();
@@ -43,6 +79,7 @@ const Profile = () => {
             alert(err.message)
         })
     }
+    
 
   return (
     <>
@@ -52,7 +89,7 @@ const Profile = () => {
         </p>
       </Navbar>
       <Form onSubmit={profileSubmitHandler}>
-        <Container className="shadow-lg" style={{ border: "1px solid black", marginTop: '10%',borderRadius: '8px' }}>
+        <Container className="shadow-lg" style={{ border: "1px solid black", marginTop: '10%',borderRadius: '8px', width: '60%' }}>
           <div style={{ display: "flex", justifyContent: "space-between", padding: '10px' , borderBottom: '1px solid black' }}>
             <h3>Contact Details</h3>
             <Button variant="outline-danger">Cancle</Button>
