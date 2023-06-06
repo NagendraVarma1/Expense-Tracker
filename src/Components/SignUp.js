@@ -2,7 +2,7 @@ import React, { useContext, useRef } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import AuthContext from "../Store/Auth/auth-context";
 
-const Login = () => {
+const SignUp = () => {
   const authCtx = useContext(AuthContext);
 
   const emailInputRef = useRef();
@@ -84,4 +84,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
