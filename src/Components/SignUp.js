@@ -1,13 +1,14 @@
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import AuthContext from "../Store/Auth/auth-context";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const authCtx = useContext(AuthContext);
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
+
+  const navigate = useNavigate()
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -33,7 +34,7 @@ const SignUp = () => {
       })
         .then((res) => {
           if (res.ok) {
-            console.log("User has Successfully signed up");
+            navigate('/login')
             return res.json();
           } else {
             return res.json().then((data) => {
@@ -42,7 +43,7 @@ const SignUp = () => {
           }
         })
         .then((data) => {
-          authCtx.logIn(data.idToken);
+          console.log("User has Successfully signed up");
         })
         .catch((err) => {
           alert(err.message);
