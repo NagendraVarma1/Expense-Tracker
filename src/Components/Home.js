@@ -1,11 +1,18 @@
 import React, { Fragment, useContext } from "react";
 import { Button, Navbar } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../Store/Auth/auth-context";
 
 const Home = () => {
 
+  const navigate = useNavigate();
+
   const authCtx = useContext(AuthContext)
+
+  const logOutClickHandler = () => {
+    authCtx.logOut()
+    navigate('/login')
+  }
 
   const emailVerificationHandler = () => {
 
@@ -55,13 +62,20 @@ const Home = () => {
           <NavLink to={"/profile"}>Complete Now</NavLink>
         </p>
       </Navbar>
-      <Button
+      <div style={{ position: "absolute", right: "20px", top: "60px" }}>
+      <Button className="mx-3"
         variant="outline-success text-dark"
-        style={{ position: "absolute", right: "20px", top: "60px" }}
         onClick={emailVerificationHandler}
       >
         Verify Email Id
       </Button>
+      <Button
+        variant="outline-success text-dark"
+         onClick={logOutClickHandler}
+      >
+        LogOut
+      </Button>
+      </div>
     </Fragment>
   );
 };
