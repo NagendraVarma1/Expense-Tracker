@@ -48,7 +48,6 @@ const Profile = () => {
 
         const updatedName = nameInputRef.current.value;
         const updatedImage = imageInputRef.current.value;
-        console.log(updatedName, updatedImage)
 
         let url = 'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBcIbPGIsiRRG6TKVgArKPKmdMlcbj_NLI';
 
