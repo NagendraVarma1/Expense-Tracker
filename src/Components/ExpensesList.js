@@ -15,10 +15,11 @@ const ExpensesList = () => {
 
       const data = await response.data;
       if (data) {
-        const expenses = Object.keys(data).map((index) => ({
-          enteredAmount: data[index].enteredAmount,
-          enteredCategory: data[index].enteredCategory,
-          enteredDescription: data[index].enteredDescription,
+        const expenses = Object.keys(data).map((key) => ({
+          id: key,
+          enteredAmount: data[key].enteredAmount,
+          enteredCategory: data[key].enteredCategory,
+          enteredDescription: data[key].enteredDescription,
         }));
         setAllExpenses(expenses);
       } else {
@@ -66,7 +67,8 @@ const ExpensesList = () => {
       {head}
 
       {allExpenses.map((expense) => (
-        <li key={expense.enteredDescription} className="mt-3">
+        
+        <li key={expense.id} className="mt-3">
           <div style={{ width: "80%", marginLeft: "10%" }}>
             <Row>
               <Col>
