@@ -79,7 +79,7 @@ const SignUp = () => {
         </Form.Group>
         </Container>
         <div className="text-center mt-4">
-          <Button type="submit">Sign Up</Button>
+          <Button variant="success" type="submit">Sign Up</Button>
         </div>
       </Form>
         <div className="text-center mt-1 mb-3">

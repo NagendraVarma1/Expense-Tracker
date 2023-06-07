@@ -1,13 +1,43 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
-const ExpensesList = (props) => {
+const ExpensesList = () => {
+  const [allExpenses, setAllExpenses] = useState([]);
+  const fetchData = async () => {
+    try {
+      const email = localStorage.getItem("email");
+      const updatedEmail = email.replace("@", "").replace(".", "");
+
+      const response = await axios.get(
+        `https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}.json`
+      );
+
+      const data = await response.data;
+      if (data) {
+        const expenses = Object.keys(data).map((index) => ({
+          enteredAmount: data[index].enteredAmount,
+          enteredCategory: data[index].enteredCategory,
+          enteredDescription: data[index].enteredDescription,
+        }));
+        setAllExpenses(expenses);
+      } else {
+        setAllExpenses([]);
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   let head;
-  if (props.list.length === 0) {
+  if (allExpenses.length === 0) {
     head = <h1 className="mt-4">No Expenses</h1>;
   } else {
     head = (
-      <div className="mt-3" style={{ width: "80%", marginLeft: "10%", }}>
+      <div className="mt-3" style={{ width: "80%", marginLeft: "10%" }}>
         <Row>
           <Col>
             <h3>Amount</h3>
@@ -35,7 +65,7 @@ const ExpensesList = (props) => {
       </h1>
       {head}
 
-      {props.list.map((expense) => (
+      {allExpenses.map((expense) => (
         <li key={expense.enteredDescription} className="mt-3">
           <div style={{ width: "80%", marginLeft: "10%" }}>
             <Row>

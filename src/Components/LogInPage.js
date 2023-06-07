@@ -42,6 +42,7 @@ const LogIn = () => {
       .then((data) => {
         navigate("/home");
         authCtx.logIn(data.idToken);
+        localStorage.setItem('email', enteredEmail)
       })
       .catch((err) => {
         alert(err.message);

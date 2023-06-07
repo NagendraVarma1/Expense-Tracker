@@ -10,6 +10,7 @@ const Home = () => {
 
   const logOutClickHandler = () => {
     authCtx.logOut();
+    localStorage.removeItem('email')
     navigate("/login");
   };
 
