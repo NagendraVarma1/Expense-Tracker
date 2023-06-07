@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import ExpensesList from "./ExpensesList";
 import axios from "axios";
@@ -7,13 +7,25 @@ const Expenses = () => {
   const amountInputRef = useRef();
   const descriptionInputRef = useRef();
   const categoryInputRef = useRef();
+  const [edit, setEdit] = useState(false)
+  const [id, setId] = useState(null)
 
   const email = localStorage.getItem("email");
   const updatedEmail = email.replace("@", "").replace(".", "");
 
+  
+  const editHandler = (expense) => {
+    setEdit(true)
+    setId(expense.id)
+    amountInputRef.current.value = expense.enteredAmount;
+    descriptionInputRef.current.value = expense.enteredDescription;
+    categoryInputRef.current.value = expense.enteredCategory;
+  }
+
   const formSubmitHandler = async (event) => {
     event.preventDefault();
     try {
+        console.log(id)
       const enteredAmount = amountInputRef.current.value;
       const enteredDescription = descriptionInputRef.current.value;
       const enteredCategory = categoryInputRef.current.value;
@@ -23,11 +35,19 @@ const Expenses = () => {
         enteredDescription,
         enteredCategory,
       };
-      await axios.post(
+      if(edit) {
+        await axios.put(`https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}/${id}.json`,
+        enteredExpenses)
+        setEdit(false)
+        setId(null);
+      }
+      else {
+        await axios.post(
         `https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}.json`,
         enteredExpenses
       );
-
+      }
+      
       window.location.reload();
     } catch (err) {
       alert(err);
@@ -73,7 +93,7 @@ const Expenses = () => {
         </Form>
       </Container>
       <Container className="mt-5">
-        <ExpensesList />
+        <ExpensesList onEditClick={editHandler}/>
       </Container>
     </Fragment>
   );

@@ -1,15 +1,14 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { Button, Container, Navbar } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import AuthContext from "../Store/Auth/auth-context";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  const authCtx = useContext(AuthContext);
+  const token = localStorage.getItem('token')
 
   const logOutClickHandler = () => {
-    authCtx.logOut();
+    localStorage.removeItem('token')
     localStorage.removeItem('email')
     navigate("/login");
   };
@@ -22,7 +21,7 @@ const Home = () => {
       method: "POST",
       body: JSON.stringify({
         requestType: "VERIFY_EMAIL",
-        idToken: authCtx.token,
+        idToken: token,
       }),
       headers: {
         "Content-Type": "application/json",

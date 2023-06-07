@@ -1,14 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 
-const ExpensesList = () => {
+const ExpensesList = (props) => {
   const [allExpenses, setAllExpenses] = useState([]);
-  const fetchData = async () => {
-    try {
-      const email = localStorage.getItem("email");
-      const updatedEmail = email.replace("@", "").replace(".", "");
+  const [load, setLoad] = useState(true)
 
+  const email = localStorage.getItem("email");
+  const updatedEmail = email.replace("@", "").replace(".", "");
+
+  const fetchData = async () => {
+    setLoad(false)
+    try {
       const response = await axios.get(
         `https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}.json`
       );
@@ -31,8 +34,23 @@ const ExpensesList = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if(load){
+      fetchData();
+    }
+  }, [load]);
+
+  const deleteExpenseHandler = async (id) => {
+    try {
+      await axios.delete(
+        `https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}/${id}.json`
+      );
+      setLoad(true)
+      console.log("Expense Successfully deleted");
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   let head;
   if (allExpenses.length === 0) {
     head = <h1 className="mt-4">No Expenses</h1>;
@@ -40,14 +58,14 @@ const ExpensesList = () => {
     head = (
       <div className="mt-3" style={{ width: "80%", marginLeft: "10%" }}>
         <Row>
-          <Col>
-            <h3>Amount</h3>
+          <Col xs={3}>
+            <h5>Amount</h5>
           </Col>
-          <Col>
-            <h3>Description</h3>
+          <Col xs={3}>
+            <h5>Description</h5>
           </Col>
-          <Col>
-            <h3>Category</h3>
+          <Col xs={3}>
+            <h5>Category</h5>
           </Col>
         </Row>
       </div>
@@ -67,18 +85,36 @@ const ExpensesList = () => {
       {head}
 
       {allExpenses.map((expense) => (
-        
+
         <li key={expense.id} className="mt-3">
           <div style={{ width: "80%", marginLeft: "10%" }}>
             <Row>
-              <Col>
+              <Col xs={3}>
                 <h4>{expense.enteredAmount}</h4>
               </Col>
-              <Col>
+              <Col xs={3}>
                 <h4>{expense.enteredDescription}</h4>
               </Col>
-              <Col>
+              <Col xs={3}>
                 <h4>{expense.enteredCategory}</h4>
+              </Col>
+              <Col xs={3}>
+                <div style={{ display: "flex" }}>
+                  <Button
+                    style={{ marginRight: "4px" }}
+                    variant="secondary text-light"
+                    onClick={() => {props.onEditClick(expense)}}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    style={{ marginRight: "4px" }}
+                    variant="danger text-light"
+                    onClick={() => deleteExpenseHandler(expense.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </Col>
             </Row>
           </div>

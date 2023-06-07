@@ -1,10 +1,8 @@
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import AuthContext from "../Store/Auth/auth-context";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const LogIn = () => {
-  const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
   const emailInputRef = useRef();
@@ -41,7 +39,7 @@ const LogIn = () => {
       })
       .then((data) => {
         navigate("/home");
-        authCtx.logIn(data.idToken);
+        localStorage.setItem('token', data.idToken)
         localStorage.setItem('email', enteredEmail)
       })
       .catch((err) => {

@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Container, Form, Navbar } from "react-bootstrap";
-import AuthContext from "../Store/Auth/auth-context";
 
 const Profile = () => {
-    const authCtx = useContext(AuthContext)
+    const token = localStorage.getItem('token')
     const nameInputRef = useRef();
     const imageInputRef = useRef();
 
@@ -13,7 +12,7 @@ const Profile = () => {
       fetch(url, {
         method: 'POST',
         body: JSON.stringify({
-          idToken: authCtx.token,
+          idToken: token,
         }),
         headers: {
           'Content-Type' : 'application/json'
@@ -54,7 +53,7 @@ const Profile = () => {
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
-                idToken: authCtx.token,
+                idToken: token,
                 displayName: updatedName,
                 photoUrl: updatedImage,
                 returnSecureToken: true
