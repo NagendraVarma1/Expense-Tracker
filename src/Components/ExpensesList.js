@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { authActions } from "../Store/auth-slice";
 
 const ExpensesList = (props) => {
   const [allExpenses, setAllExpenses] = useState([]);
   const [load, setLoad] = useState(true);
+  const dispatch = useDispatch();
 
   const email = localStorage.getItem("email");
   const updatedEmail = email.replace("@", "").replace(".", "");
@@ -73,6 +76,7 @@ const ExpensesList = (props) => {
   }
 
   let totalAmount = 0;
+  
   return (
     <ul className="list-unstyled">
       <h1
@@ -88,6 +92,7 @@ const ExpensesList = (props) => {
 
       {allExpenses.map((expense) => {
         totalAmount = totalAmount + Number(expense.enteredAmount);
+        dispatch(authActions.isPremium(totalAmount))
         return (
           <li key={expense.id} className="mt-3">
             <div style={{ width: "80%", marginLeft: "10%" }}>

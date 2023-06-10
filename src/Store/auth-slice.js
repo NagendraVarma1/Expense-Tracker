@@ -1,25 +1,30 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialAuthState = {
     isAuthenticated: false,
-    token: '',
-    email: '',
+    isPremium: false
 }
+
+
 
 const authSlice = createSlice({
     name: 'authentication',
     initialState: initialAuthState,
     reducers: {
-        login(state, action) {
+        login(state) {
             state.isAuthenticated = true;
-            state.token = action.payload.idToken;
-            state.email = action.payload.email;
         },
         logout(state) {
             state.isAuthenticated = false;
-            state.token = null;
         },
-        
+        isPremium(state, action) {
+            if(action.payload > 10000) {
+                state.isPremium = true;
+            }
+            else {
+                state.isPremium = false;
+            }
+        }
     }
 })
 
