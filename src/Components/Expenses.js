@@ -25,7 +25,6 @@ const Expenses = () => {
   const formSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-        console.log(id)
       const enteredAmount = amountInputRef.current.value;
       const enteredDescription = descriptionInputRef.current.value;
       const enteredCategory = categoryInputRef.current.value;

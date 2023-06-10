@@ -1,9 +1,13 @@
 import React, { useRef } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
+import { authActions } from "../Store/auth-slice";
 
 const LogIn = () => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -39,8 +43,9 @@ const LogIn = () => {
       })
       .then((data) => {
         navigate("/home");
-        localStorage.setItem('token', data.idToken)
-        localStorage.setItem('email', enteredEmail)
+        dispatch(authActions.login(data))
+        localStorage.setItem('token', data.idToken);
+        localStorage.setItem('email',data.email)
       })
       .catch((err) => {
         alert(err.message);

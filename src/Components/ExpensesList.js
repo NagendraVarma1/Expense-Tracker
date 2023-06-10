@@ -4,13 +4,13 @@ import { Button, Col, Row } from "react-bootstrap";
 
 const ExpensesList = (props) => {
   const [allExpenses, setAllExpenses] = useState([]);
-  const [load, setLoad] = useState(true)
+  const [load, setLoad] = useState(true);
 
   const email = localStorage.getItem("email");
   const updatedEmail = email.replace("@", "").replace(".", "");
 
   const fetchData = async () => {
-    setLoad(false)
+    setLoad(false);
     try {
       const response = await axios.get(
         `https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}.json`
@@ -34,7 +34,7 @@ const ExpensesList = (props) => {
   };
 
   useEffect(() => {
-    if(load){
+    if (load) {
       fetchData();
     }
   }, [load]);
@@ -44,7 +44,7 @@ const ExpensesList = (props) => {
       await axios.delete(
         `https://expense-tracker-86fd0-default-rtdb.firebaseio.com/${updatedEmail}/${id}.json`
       );
-      setLoad(true)
+      setLoad(true);
       console.log("Expense Successfully deleted");
     } catch (err) {
       alert(err);
@@ -71,6 +71,8 @@ const ExpensesList = (props) => {
       </div>
     );
   }
+
+  let totalAmount = 0;
   return (
     <ul className="list-unstyled">
       <h1
@@ -84,42 +86,57 @@ const ExpensesList = (props) => {
       </h1>
       {head}
 
-      {allExpenses.map((expense) => (
-
-        <li key={expense.id} className="mt-3">
-          <div style={{ width: "80%", marginLeft: "10%" }}>
-            <Row>
-              <Col xs={3}>
-                <h4>{expense.enteredAmount}</h4>
-              </Col>
-              <Col xs={3}>
-                <h4>{expense.enteredDescription}</h4>
-              </Col>
-              <Col xs={3}>
-                <h4>{expense.enteredCategory}</h4>
-              </Col>
-              <Col xs={3}>
-                <div style={{ display: "flex" }}>
-                  <Button
-                    style={{ marginRight: "4px" }}
-                    variant="secondary text-light"
-                    onClick={() => {props.onEditClick(expense)}}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    style={{ marginRight: "4px" }}
-                    variant="danger text-light"
-                    onClick={() => deleteExpenseHandler(expense.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </li>
-      ))}
+      {allExpenses.map((expense) => {
+        totalAmount = totalAmount + Number(expense.enteredAmount);
+        return (
+          <li key={expense.id} className="mt-3">
+            <div style={{ width: "80%", marginLeft: "10%" }}>
+              <Row>
+                <Col xs={3}>
+                  <h4>{expense.enteredAmount}</h4>
+                </Col>
+                <Col xs={3}>
+                  <h4>{expense.enteredDescription}</h4>
+                </Col>
+                <Col xs={3}>
+                  <h4>{expense.enteredCategory}</h4>
+                </Col>
+                <Col xs={3}>
+                  <div style={{ display: "flex" }}>
+                    <Button
+                      style={{ marginRight: "4px" }}
+                      variant="secondary text-light"
+                      onClick={() => {
+                        props.onEditClick(expense);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      style={{ marginRight: "4px" }}
+                      variant="danger text-light"
+                      onClick={() => deleteExpenseHandler(expense.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </li>
+        );
+      })}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "right",
+          marginTop: "30px",
+          marginRight: "80px",
+        }}
+      >
+        <h2 className="mx-3">Total Amount: </h2>
+        <h2>{totalAmount}</h2>
+      </div>
     </ul>
   );
 };

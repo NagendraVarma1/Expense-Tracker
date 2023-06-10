@@ -1,13 +1,18 @@
 import React, { Fragment } from "react";
 import { Button, Container, Navbar } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
+import { authActions } from "../Store/auth-slice";
 
 const Home = () => {
   const navigate = useNavigate();
 
+  const dispatch = useDispatch()
+
   const token = localStorage.getItem('token')
 
   const logOutClickHandler = () => {
+    dispatch(authActions.logout());
     localStorage.removeItem('token')
     localStorage.removeItem('email')
     navigate("/login");
