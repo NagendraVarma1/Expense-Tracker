@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const initialAuthState = {
     isAuthenticated: false,
-    isPremium: false
+    isPremium: false,
+    themeToggle: false,
+    expenses: [],
 }
 
 
@@ -24,6 +27,12 @@ const authSlice = createSlice({
             else {
                 state.isPremium = false;
             }
+        },
+        themeToggle(state) {
+            state.themeToggle = !state.themeToggle
+        },
+        allExpenses(state, action) {
+            state.expenses.push(action.payload)
         }
     }
 })
