@@ -1,11 +1,10 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Container, Form, Navbar } from "react-bootstrap";
 import ExpensesList from "./ExpensesList";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../Store/auth-slice";
-import ExpenseContext from "../ExpenseStore/expense-context";
 
 const Expenses = () => {
   const amountInputRef = useRef();

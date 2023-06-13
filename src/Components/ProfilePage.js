@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { Button, Container, Form, Navbar } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const token = localStorage.getItem('token')
+    const navigate = useNavigate();
     const nameInputRef = useRef();
     const imageInputRef = useRef();
 
@@ -77,7 +79,9 @@ const Profile = () => {
             alert(err.message)
         })
     }
-    
+    const cancleHandler = () => {
+      navigate('/home')
+    }
 
   return (
     <>
@@ -90,7 +94,7 @@ const Profile = () => {
         <Container className="shadow-lg" style={{ border: "1px solid black", marginTop: '10%',borderRadius: '8px', width: '60%' }}>
           <div style={{ display: "flex", justifyContent: "space-between", padding: '10px' , borderBottom: '1px solid black' }}>
             <h3>Contact Details</h3>
-            <Button variant="outline-danger">Cancle</Button>
+            <Button variant="outline-danger" onClick={cancleHandler}>Cancle</Button>
           </div>
           <Form.Group className="mt-3">
             <Form.Label>Full Name: </Form.Label>
